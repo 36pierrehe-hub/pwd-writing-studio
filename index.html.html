@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PWD — Professional Writing Documents</title>
+<style>
+:root{
+ --ink:#24213a;--muted:#77758a;--purple:#6650d9;--purple2:#8b72f0;
+ --pink:#f5a6d5;--mint:#a9e8d2;--yellow:#ffe49a;--blue:#a9d8ff;
+ --line:#e9e6f0;--canvas:#f4f3f8;--paper:#fff;--shadow:0 8px 30px #29204412;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--canvas);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select{font:inherit}button{cursor:pointer}
+.topbar{height:66px;background:#fff;display:flex;align-items:center;gap:14px;padding:0 22px;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}
+.brand{display:flex;align-items:center;gap:10px;min-width:245px}
+.logo{width:40px;height:40px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(140deg,#6551d8 4%,#9d6be9 52%,#f19acb);box-shadow:0 5px 13px #7654d94a;overflow:hidden}
+.logo svg{width:29px;height:29px}
+.brand-name{font-size:19px;font-weight:850;letter-spacing:-.7px}.brand-sub{font-size:10px;color:#9691a6;letter-spacing:.5px;font-weight:650}
+.docname{border:0;outline:0;font-size:15px;font-weight:650;color:#48445a;min-width:100px;max-width:310px;padding:8px 10px;border-radius:8px}.docname:focus{background:#f6f3ff}
+.top-spacer{flex:1}.saved{font-size:11px;color:#3d9977;white-space:nowrap}
+.top-btn{border:1px solid var(--line);background:#fff;color:#55516a;border-radius:9px;padding:8px 12px;font-size:12px;font-weight:700}
+.top-btn.primary{background:var(--purple);border-color:var(--purple);color:#fff;box-shadow:0 4px 10px #6650d933}
+.top-btn:hover,.tool:hover{background:#f3efff}
+.top-btn.primary:hover{background:#5741c5}
+.app{max-width:1600px;margin:auto}
+.menu-row{height:39px;background:#fff;display:flex;align-items:center;padding:0 25px;gap:23px;border-bottom:1px solid var(--line)}
+.menu-row button{border:0;background:none;color:#5e5a70;font-size:12px;padding:6px 2px}
+.menu-row button:hover{color:var(--purple)}
+.toolbar{background:#fbfaff;border-bottom:1px solid var(--line);padding:9px 22px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;position:sticky;top:66px;z-index:8}
+.tool{height:32px;min-width:32px;padding:0 9px;border:1px solid transparent;border-radius:7px;background:transparent;color:#4d4960;font-size:13px;font-weight:650}
+.tool.active{background:#eae4ff;color:#5740c5;border-color:#d9d0ff}
+.tool-sep{height:22px;width:1px;background:#e4e0eb;margin:0 3px}
+.toolbar select,.toolbar input[type=color]{height:32px;border:1px solid #e7e3ee;border-radius:7px;background:#fff;color:#49455b;padding:0 8px;font-size:12px}
+#fontFamily{width:145px}#fontSize{width:66px}
+.color-tool{display:flex;align-items:center;gap:5px;font-size:11px;color:#686278}
+.color-tool input{width:25px;height:25px;border:0;padding:0;background:none;cursor:pointer}
+.workspace{display:grid;grid-template-columns:220px minmax(0,1fr);min-height:calc(100vh - 143px)}
+.sidebar{background:#fff;border-right:1px solid var(--line);padding:20px 14px}
+.side-head{font-size:10px;letter-spacing:1.3px;font-weight:850;color:#9b96aa;margin:7px 10px 13px}
+.side-link{display:flex;align-items:center;gap:10px;padding:10px 11px;margin:3px 0;border-radius:9px;color:#625e73;font-size:13px;font-weight:600}
+.side-link.active{background:#f0ecff;color:#5c45c6}.side-icon{width:20px;text-align:center}
+.side-note{margin:26px 5px 0;padding:13px;border-radius:13px;background:linear-gradient(135deg,#f3eaff,#fff0f7);font-size:11px;color:#766b8c;line-height:1.55}
+.main{min-width:0;padding:25px clamp(16px,3vw,42px) 50px}
+.library-head{display:flex;align-items:end;justify-content:space-between;gap:15px;margin:0 auto 20px;max-width:1000px}
+.kicker{font-size:10px;letter-spacing:1.6px;color:var(--purple);font-weight:850}
+h1{font-size:28px;letter-spacing:-1px;margin:5px 0}.sub{font-size:13px;color:var(--muted);margin:0}
+.cards{max-width:1000px;margin:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:15px}
+.doc-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;min-height:170px;display:flex;flex-direction:column;transition:transform .18s,box-shadow .18s}
+.doc-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.cover{height:75px;border-radius:10px;display:grid;place-items:center;font-size:28px;margin-bottom:12px}
+.doc-card h3{font-size:14px;margin:0 0 5px}.doc-card p{font-size:11px;color:#8b869a;margin:0}
+.card-foot{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:12px}
+.card-foot small{font-size:10px;color:#a09bad}.open-doc{border:0;background:#f1edff;color:#5b45c2;border-radius:7px;padding:6px 9px;font-size:11px;font-weight:750}
+.empty{grid-column:1/-1;background:#fff;border:1px dashed #d8d1eb;border-radius:15px;padding:50px 20px;text-align:center;color:#777188}
+.empty strong{display:block;color:#48435b;margin:8px 0}
+.editor-area{display:none}
+.editor-topline{max-width:900px;margin:0 auto 13px;display:flex;align-items:center;justify-content:space-between;color:#8b869a;font-size:11px}
+.paper{max-width:850px;min-height:850px;margin:0 auto;background:var(--paper);border:1px solid #e7e4ec;box-shadow:0 4px 22px #28213d0d;padding:82px 92px 95px}
+#editor{min-height:660px;outline:0;color:#272437;font-family:Georgia,serif;font-size:12pt;line-height:1.65;overflow-wrap:anywhere}
+#editor:empty:before{content:"Start writing your story here…";color:#b7b2c0}
+#editor h1{font-size:26pt;margin:0 0 18px}#editor h2{font-size:19pt;margin:24px 0 12px}
+#editor blockquote{border-left:3px solid var(--pink);margin:16px 0;padding:8px 17px;color:#777084;background:#fff8fc}
+.statusbar{max-width:850px;margin:10px auto 0;display:flex;justify-content:space-between;color:#9993a7;font-size:10px}
+footer{text-align:center;color:#aaa4b5;font-size:10px;padding:26px}
+@media(max-width:850px){.workspace{grid-template-columns:1fr}.sidebar{display:none}.brand{min-width:auto}.brand-sub{display:none}.docname{max-width:145px}.saved{display:none}.paper{padding:42px 28px;min-height:700px}.menu-row{gap:14px;padding:0 14px}.toolbar{top:66px;padding:8px 12px}}
+@media(max-width:520px){.topbar{padding:0 10px;gap:7px}.brand-name{font-size:16px}.logo{width:35px;height:35px}.docname{max-width:105px;font-size:12px}.top-btn{padding:7px 9px}.menu-row{gap:10px}.menu-row button{font-size:11px}.main{padding:20px 12px}.library-head{align-items:start;flex-direction:column}}
+
+/* Community publishing */
+.side-link{cursor:pointer}
+.side-link:hover{background:#f7f4ff}
+.community-area{display:none;max-width:1000px;margin:0 auto}
+.community-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:20px}
+.community-feed{display:grid;gap:14px}
+.post-card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:18px 20px;box-shadow:0 5px 18px #29204408}
+.post-meta{display:flex;align-items:center;gap:9px;color:#8b869a;font-size:11px;margin-bottom:10px}
+.avatar{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(140deg,#e7ddff,#f9d9ee);font-size:15px}
+.post-card h3{margin:0 0 8px;font-size:17px}
+.post-excerpt{font-family:Georgia,serif;color:#514d61;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere}
+.post-actions{display:flex;align-items:center;gap:9px;margin-top:14px;padding-top:12px;border-top:1px solid #f0edf4;flex-wrap:wrap}
+.post-actions button,.comment-form button{border:1px solid #e9e4f2;background:#faf9fd;color:#625b78;border-radius:8px;padding:7px 10px;font-size:11px;font-weight:700}
+.post-actions button:hover,.comment-form button:hover{background:#f0ecff;color:#5b45c2}
+.post-actions .liked{background:#fcecf5;color:#b44d84;border-color:#f5d5e6}
+.comments{margin-top:12px;display:grid;gap:8px}
+.comment{background:#faf9fc;border-radius:9px;padding:8px 10px;font-size:12px;color:#5d586d;white-space:pre-wrap}
+.comment strong{color:#4d4664}
+.comment-form{display:flex;gap:8px;margin-top:10px}
+.comment-form input,.publish-form input,.publish-form textarea,.publish-form select{width:100%;border:1px solid #e5e0ed;border-radius:9px;padding:10px 11px;font:inherit;font-size:13px;color:var(--ink);background:#fff}
+.comment-form input{flex:1;min-width:0}
+.publish-overlay{display:none;position:fixed;inset:0;background:#211a36a8;z-index:30;align-items:center;justify-content:center;padding:18px}
+.publish-modal{background:#fff;width:min(540px,100%);max-height:90vh;overflow:auto;border-radius:18px;padding:22px;box-shadow:0 20px 70px #100b2580}
+.publish-modal h2{margin:0 0 6px;font-size:21px}
+.publish-modal p{font-size:12px;color:#777188;line-height:1.55;margin:0 0 16px}
+.publish-form{display:grid;gap:11px}
+.publish-form label{font-size:11px;font-weight:750;color:#625b78;display:grid;gap:5px}
+.publish-form textarea{min-height:140px;resize:vertical;font-family:Georgia,serif;line-height:1.55}
+.publish-buttons{display:flex;justify-content:flex-end;gap:8px;margin-top:4px}
+.community-empty{background:#fff;border:1px dashed #d8d1eb;border-radius:15px;padding:42px 20px;text-align:center;color:#777188}
+.community-empty strong{display:block;color:#48435b;margin:8px 0}
+.safety-note{background:#f4f1ff;border:1px solid #e5defd;border-radius:11px;padding:11px 13px;color:#655b83;font-size:11px;line-height:1.5;margin:12px 0}
+@media(max-width:600px){.community-head{align-items:start;flex-direction:column}.post-card{padding:15px}.comment-form{flex-direction:column}}
+
+</style>
+</head>
+<body>
+<div class="app">
+<header class="topbar">
+ <div class="brand">
+  <div class="logo" aria-label="PWD logo">
+   <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M9 7.5h15.5L31 14v18.5H9V7.5Z" stroke="white" stroke-width="2.3" stroke-linejoin="round"/><path d="M24 7.8V14h6.2" stroke="white" stroke-width="2.3" stroke-linejoin="round"/><path d="m14 26 2.5-6.2 8.4-8.4 3.6 3.6-8.4 8.4L14 26Z" fill="#FFE39A" stroke="white" stroke-width="1.2" stroke-linejoin="round"/><path d="m16.5 19.8 3.6 3.6" stroke="#7353D7" stroke-width="1.3"/></svg>
+  </div>
+  <div><div class="brand-name">PWD</div><div class="brand-sub">PROFESSIONAL WRITING DOCUMENTS</div></div>
+ </div>
+ <input id="docTitle" class="docname" value="My documents" aria-label="Document title">
+ <div class="top-spacer"></div><span class="saved" id="saveStatus">✓ All changes saved</span>
+ <button class="top-btn" id="backBtn" style="display:none">← Library</button>
+ <button class="top-btn" id="printBtn" style="display:none">Print</button>
+ <button class="top-btn primary" id="publishBtn" style="display:none">↗ Publish</button>
+ <button class="top-btn primary" id="newBtn">＋ New</button>
+</header>
+<nav class="menu-row" aria-label="Main menu">
+ <button id="fileMenu">File</button><button id="editMenu">Edit</button><button id="viewMenu">View</button><button id="insertMenu">Insert</button><button id="formatMenu">Format</button><button id="toolsMenu">Tools</button>
+</nav>
+<div class="toolbar" id="toolbar">
+ <button class="tool" id="undo" title="Undo">↶</button><button class="tool" id="redo" title="Redo">↷</button><span class="tool-sep"></span>
+ <select id="fontFamily" aria-label="Font family">
+  <option value="Arial">Arial</option><option value="Georgia" selected>Georgia</option><option value="'Times New Roman'">Times New Roman</option><option value="Verdana">Verdana</option><option value="'Trebuchet MS'">Trebuchet MS</option><option value="Garamond">Garamond</option><option value="'Courier New'">Courier New</option><option value="Impact">Impact</option>
+ </select>
+ <select id="fontSize" aria-label="Font size"><option value="8">8</option><option value="10">10</option><option value="12" selected>12</option><option value="14">14</option><option value="16">16</option><option value="18">18</option><option value="20">20</option><option value="24">24</option><option value="28">28</option><option value="32">32</option><option value="36">36</option><option value="48">48</option><option value="72">72</option></select>
+ <span class="tool-sep"></span>
+ <button class="tool" data-cmd="bold" title="Bold"><b>B</b></button><button class="tool" data-cmd="italic" title="Italic"><i>I</i></button><button class="tool" data-cmd="underline" title="Underline"><u>U</u></button><button class="tool" data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>
+ <span class="tool-sep"></span>
+ <label class="color-tool">Text <input id="textColor" type="color" value="#29243b" title="Text color"></label>
+ <label class="color-tool">Highlight <input id="highlightColor" type="color" value="#ffe49a" title="Highlight color"></label>
+ <span class="tool-sep"></span>
+ <select id="blockType" aria-label="Paragraph style"><option value="p">Normal text</option><option value="h1">Title</option><option value="h2">Heading</option><option value="blockquote">Quote</option></select>
+ <button class="tool" data-cmd="insertUnorderedList" title="Bulleted list">• List</button><button class="tool" data-cmd="insertOrderedList" title="Numbered list">1. List</button>
+ <span class="tool-sep"></span><button class="tool" data-cmd="justifyLeft" title="Align left">☰</button><button class="tool" data-cmd="justifyCenter" title="Center">≡</button><button class="tool" data-cmd="justifyRight" title="Align right">☷</button>
+ <button class="tool" id="clearFormat" title="Clear formatting">Clear</button>
+</div>
+<div class="workspace">
+ <aside class="sidebar">
+  <div class="side-head">WORKSPACE</div>
+  <div class="side-link active" id="myDocsNav"><span class="side-icon">📄</span> My documents</div>
+  <div class="side-link" id="communityNav"><span class="side-icon">🌎</span> Community</div>
+  <div class="side-link"><span class="side-icon">⭐</span> Starred <span style="margin-left:auto;color:#aaa;font-size:10px">Soon</span></div>
+  <div class="side-link"><span class="side-icon">🗂️</span> Folders <span style="margin-left:auto;color:#aaa;font-size:10px">Soon</span></div>
+  <div class="side-note"><b style="color:#6650d9">A little note ✨</b><br>Great stories aren't written in one sitting. Keep going, one paragraph at a time.</div>
+ </aside>
+ <main class="main">
+  <section id="library">
+   <div class="library-head"><div><div class="kicker">YOUR CREATIVE SPACE</div><h1>My documents</h1><p class="sub">A polished little home for all your big ideas.</p></div><button class="top-btn primary" id="createBtn">＋ Create document</button></div>
+   <div class="cards" id="cards"></div>
+  </section>
+
+  <section class="community-area" id="communityArea">
+   <div class="community-head">
+    <div><div class="kicker">THE WRITERS' CORNER</div><h1>Community</h1><p class="sub">Discover little worlds, fresh ideas, and stories from fellow writers.</p></div>
+    <button class="top-btn primary" id="newPostBtn">＋ Share a story</button>
+   </div>
+   <div class="safety-note">Community preview: use a pen name or post anonymously. Keep personal details private, be respectful in comments, and report anything that feels inappropriate.</div>
+   <div class="community-feed" id="communityFeed"></div>
+  </section>
+  <section class="editor-area" id="editorArea">
+   <div class="editor-topline"><span>DOCUMENT EDITOR</span><span id="wordCount">0 words</span></div>
+   <div class="paper"><div id="editor" contenteditable="true" spellcheck="true"></div></div>
+   <div class="statusbar"><span>Page 1</span><span>Saved on this device · PWD Writing Studio</span></div>
+  </section>
+ </main>
+</div>
+<footer>PWD · Professional Writing Documents · Made for the joy of writing</footer>
+</div>
+
+<div class="publish-overlay" id="publishOverlay" role="dialog" aria-modal="true" aria-labelledby="publishTitle">
+ <div class="publish-modal">
+  <h2 id="publishTitle">Share with the community</h2>
+  <p>Your writing will appear in the Community feed on this device. This prototype does not upload posts to a public server.</p>
+  <div class="publish-form">
+   <label>Display name
+    <input id="postAuthor" maxlength="24" placeholder="Choose a pen name (or leave blank for Anonymous)">
+   </label>
+   <label>Story title
+    <input id="postTitle" maxlength="90" placeholder="Give your writing a title">
+   </label>
+   <label>Your writing
+    <textarea id="postBody" maxlength="6000" placeholder="Share an excerpt, poem, scene, or short story…"></textarea>
+   </label>
+   <label>Category
+    <select id="postCategory"><option>Short story</option><option>Fantasy</option><option>Poetry</option><option>Science fiction</option><option>Adventure</option><option>Other</option></select>
+   </label>
+   <div class="safety-note">Before publishing: remove phone numbers, addresses, school names, and other identifying details. Only share writing you are comfortable making public.</div>
+   <div class="publish-buttons"><button class="top-btn" id="cancelPublish">Cancel</button><button class="top-btn primary" id="confirmPublish">Publish post</button></div>
+  </div>
+ </div>
+</div>
+
+<script>
+const STORE='pwd_documents_premium_v2';
+let docs=JSON.parse(localStorage.getItem(STORE)||'[]'),current=null,timer=null;
+const $=id=>document.getElementById(id);
+const editor=$('editor');
+const COMMUNITY_STORE='pwd_community_posts_v1';
+let communityPosts=JSON.parse(localStorage.getItem(COMMUNITY_STORE)||'[]');
+function persistCommunity(){localStorage.setItem(COMMUNITY_STORE,JSON.stringify(communityPosts));}
+function showLibrary(){
+ save();current=null;$('communityArea').style.display='none';$('editorArea').style.display='none';$('library').style.display='block';
+ $('backBtn').style.display='none';$('printBtn').style.display='none';$('publishBtn').style.display='none';$('newBtn').style.display='inline-block';
+ $('docTitle').value='My documents';$('myDocsNav').classList.add('active');$('communityNav').classList.remove('active');render();
+}
+function showCommunity(){
+ save();current=null;$('library').style.display='none';$('editorArea').style.display='none';$('communityArea').style.display='block';
+ $('backBtn').style.display='none';$('printBtn').style.display='none';$('publishBtn').style.display='none';$('newBtn').style.display='none';
+ $('docTitle').value='Community';$('myDocsNav').classList.remove('active');$('communityNav').classList.add('active');renderCommunity();window.scrollTo(0,0);
+}
+function openPublish(prefill=false){
+ if(prefill && current){save();const d=docs.find(x=>x.id===current);$('postTitle').value=d?.title||'';$('postBody').value=editor.innerText||'';}
+ else{$('postTitle').value='';$('postBody').value='';}
+ $('postAuthor').value='';$('publishOverlay').style.display='flex';$('postAuthor').focus();
+}
+function closePublish(){$('publishOverlay').style.display='none';}
+function renderCommunity(){
+ const root=$('communityFeed');root.innerHTML='';
+ if(!communityPosts.length){root.innerHTML='<div class="community-empty"><div style="font-size:34px">📚</div><strong>The community bookshelf is waiting.</strong><span>Be the first to share a poem, scene, or story in this local preview.</span></div>';return;}
+ communityPosts.slice().sort((a,b)=>b.created-a.created).forEach(post=>{
+  const card=document.createElement('article');card.className='post-card';
+  const date=new Date(post.created).toLocaleDateString();
+  const liked=!!post.liked;
+  card.innerHTML=`<div class="post-meta"><div class="avatar">✍️</div><span><b>${escapeHTML(post.author||'Anonymous')}</b><br>${escapeHTML(post.category||'Writing')} · ${date}</span></div><h3>${escapeHTML(post.title||'Untitled')}</h3><div class="post-excerpt">${escapeHTML(post.body||'')}</div><div class="post-actions"><button class="${liked?'liked':''}" data-like="${post.id}">${liked?'♥ Liked':'♡ Like'} · ${post.likes||0}</button><button data-comment-toggle="${post.id}">💬 Comments · ${(post.comments||[]).length}</button><button data-report="${post.id}">⚑ Report</button></div><div class="comments" id="comments-${post.id}" style="display:none"></div>`;
+  const comments=card.querySelector('.comments');
+  (post.comments||[]).forEach(c=>{const el=document.createElement('div');el.className='comment';el.innerHTML='<strong>'+escapeHTML(c.author||'Reader')+':</strong> '+escapeHTML(c.text);comments.appendChild(el);});
+  const form=document.createElement('form');form.className='comment-form';form.innerHTML='<input maxlength="240" aria-label="Write a comment" placeholder="Write a kind, helpful comment…"><button type="submit">Comment</button>';
+  form.onsubmit=e=>{e.preventDefault();const input=form.querySelector('input');const val=input.value.trim();if(!val)return;post.comments=post.comments||[];post.comments.push({author:'Reader',text:val});persistCommunity();renderCommunity();const box=$('comments-'+post.id);if(box)box.style.display='grid';};
+  comments.appendChild(form);root.appendChild(card);
+ });
+ root.querySelectorAll('[data-like]').forEach(b=>b.onclick=()=>{const p=communityPosts.find(x=>x.id===b.dataset.like);if(!p)return;p.liked=!p.liked;p.likes=Math.max(0,(p.likes||0)+(p.liked?1:-1));persistCommunity();renderCommunity();});
+ root.querySelectorAll('[data-comment-toggle]').forEach(b=>b.onclick=()=>{const box=$('comments-'+b.dataset.commentToggle);box.style.display=box.style.display==='none'?'grid':'none';});
+ root.querySelectorAll('[data-report]').forEach(b=>b.onclick=()=>{const p=communityPosts.find(x=>x.id===b.dataset.report);if(!p)return;p.reported=true;persistCommunity();b.textContent='⚑ Report noted';b.disabled=true;alert('Thanks. This local preview has marked the post as reported. In a live community, reports would go to a moderation team.');});
+ }
+
+function words(html){const d=document.createElement('div');d.innerHTML=html;return(d.textContent||'').trim().split(/\s+/).filter(Boolean).length}
+function save(){
+ if(!current)return;let d=docs.find(x=>x.id===current);if(!d)return;
+ d.title=$('docTitle').value.trim()||'Untitled document';d.content=editor.innerHTML;d.words=words(d.content);d.updated=Date.now();
+ localStorage.setItem(STORE,JSON.stringify(docs));$('saveStatus').textContent='✓ All changes saved';$('wordCount').textContent=d.words+' words';
+}
+function schedule(){ $('saveStatus').textContent='Saving…';clearTimeout(timer);timer=setTimeout(save,450)}
+function escapeHTML(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function render(){
+ const root=$('cards');root.innerHTML='';
+ if(!docs.length){root.innerHTML='<div class="empty"><div style="font-size:35px">✍️</div><strong>Your writing space is ready.</strong><span>Create your first document and let the words happen.</span></div>';return}
+ docs.slice().sort((a,b)=>b.updated-a.updated).forEach((d,i)=>{
+  const el=document.createElement('article');el.className='doc-card';
+  const bg=['linear-gradient(135deg,#e9ddff,#f9d9ee)','linear-gradient(135deg,#d7f4e8,#dcecff)','linear-gradient(135deg,#ffedc3,#ffd9d0)','linear-gradient(135deg,#dce4ff,#eee0ff)'][i%4];
+  el.innerHTML=`<div class="cover" style="background:${bg}">${['📘','📗','📙','📕'][i%4]}</div><h3>${escapeHTML(d.title||'Untitled document')}</h3><p>${d.words||0} words · ${new Date(d.updated).toLocaleDateString()}</p><div class="card-foot"><small>DOCUMENT</small><button class="open-doc">Open →</button></div>`;
+  el.querySelector('button').onclick=()=>open(d.id);root.appendChild(el);
+ });
+}
+function create(){const d={id:crypto.randomUUID(),title:'Untitled document',content:'',words:0,updated:Date.now()};docs.push(d);localStorage.setItem(STORE,JSON.stringify(docs));open(d.id)}
+function open(id){
+ current=id;const d=docs.find(x=>x.id===id);if(!d)return;
+ $('docTitle').value=d.title;editor.innerHTML=d.content;$('library').style.display='none';$('editorArea').style.display='block';
+ $('backBtn').style.display='inline-block';$('printBtn').style.display='inline-block';$('publishBtn').style.display='inline-block';$('newBtn').style.display='none';$('docTitle').style.display='block';$('library').style.display='none';$('communityArea').style.display='none';$('myDocsNav').classList.remove('active');$('communityNav').classList.remove('active');
+ $('wordCount').textContent=words(d.content)+' words';window.scrollTo(0,0);editor.focus();
+}
+function back(){showLibrary();$('wordCount').textContent='0 words';}
+function command(cmd,val=null){editor.focus();document.execCommand(cmd,false,val);schedule()}
+$('newBtn').onclick=$('createBtn').onclick=create;$('backBtn').onclick=back;
+$('docTitle').addEventListener('input',schedule);editor.addEventListener('input',()=>{$('wordCount').textContent=words(editor.innerHTML)+' words';schedule()});
+document.querySelectorAll('[data-cmd]').forEach(b=>b.onclick=()=>command(b.dataset.cmd));
+$('fontFamily').onchange=e=>command('fontName',e.target.value);
+$('fontSize').onchange=e=>{editor.focus();document.execCommand('fontSize',false,'7');editor.querySelectorAll('font[size="7"]').forEach(n=>{n.removeAttribute('size');n.style.fontSize=e.target.value+'pt'});schedule()};
+$('textColor').oninput=e=>command('foreColor',e.target.value);
+$('highlightColor').oninput=e=>command('hiliteColor',e.target.value);
+$('blockType').onchange=e=>command('formatBlock',e.target.value);
+$('undo').onclick=()=>command('undo');$('redo').onclick=()=>command('redo');
+$('clearFormat').onclick=()=>command('removeFormat');
+$('printBtn').onclick=()=>window.print();
+$('fileMenu').onclick=()=>{if(!current){alert('Choose or create a document first.')}else{save();const d=docs.find(x=>x.id===current);const blob=new Blob([d.title+'\n\n'+editor.innerText],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(d.title||'document')+'.txt';a.click();URL.revokeObjectURL(a.href)}};
+$('editMenu').onclick=()=>$('undo').click();
+$('viewMenu').onclick=()=>alert('Your document is shown in page view. More view options are coming soon.');
+$('insertMenu').onclick=()=>command('insertHorizontalRule');
+$('formatMenu').onclick=()=>$('blockType').focus();
+$('toolsMenu').onclick=()=>alert('Word count: '+words(editor.innerHTML));
+$('myDocsNav').onclick=showLibrary;
+$('communityNav').onclick=showCommunity;
+$('newPostBtn').onclick=()=>openPublish(false);
+$('publishBtn').onclick=()=>openPublish(true);
+$('cancelPublish').onclick=closePublish;
+$('publishOverlay').addEventListener('click',e=>{if(e.target===$('publishOverlay'))closePublish();});
+$('confirmPublish').onclick=()=>{
+ const title=$('postTitle').value.trim(),body=$('postBody').value.trim();
+ if(!title||!body){alert('Please add a title and some writing before publishing.');return;}
+ const author=$('postAuthor').value.trim()||'Anonymous';
+ communityPosts.push({id:crypto.randomUUID(),author,title,body,category:$('postCategory').value,created:Date.now(),likes:0,liked:false,comments:[],reported:false});
+ persistCommunity();closePublish();showCommunity();
+};
+window.addEventListener('beforeunload',save);
+render();
+</script>
+</body></html>
